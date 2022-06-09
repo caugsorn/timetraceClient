@@ -1,13 +1,54 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-image: url("./images/background.gif");
+  background-color: lavender;
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: Poppins, sans-serif;
+  color: rgb(48, 42, 66);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+h3 {
+  @apply font-black tracking-decentlyWide;
 }
+
+span {
+  @apply text-purple tracking-decentlyWide font-medium;
+}
+
+.card {
+  @apply rounded-3xl bg-white w-full h-full;
+}
+
+.playButtonTracking {
+  @apply p-1 h-[40px] w-[40px] rounded-full text-center text-lg text-white  bg-purple  hover:bg-white hover:text-purple hover:shadow-lg hover:shadow-lavender;
+}
+
+.playButtonLog {
+  @apply p-2 h-[32px] w-[32px] rounded-full text-center text-purple bg-white hover:text-white hover:bg-purple hover:shadow-lg hover:shadow-lavender;
+}
+
+.fire {
+  @apply m-1;
+}
+
+.fire input[type="radio"] {
+  display: none;
+}
+
+.mainGridTemplate {
+  @apply grid grid-cols-3 grid-rows-4 gap-3 mx-4 pt-20 pb-3;
+}
+
+.buttonPrimary {
+  @apply rounded-md bg-purple text-white hover:ring-1;
+}
+
+.buttonSecondary {
+  @apply rounded-md text-purple border-[1.5px] border-purple  hover:ring-1;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
