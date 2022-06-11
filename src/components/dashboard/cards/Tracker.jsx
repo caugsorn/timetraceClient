@@ -5,11 +5,33 @@ import { LogContext } from '../../../contexts/LogContext'
 export default function Tracker() {
   const {createLog} = useContext(LogContext);
 
-  const [startTime, setStartTime] = useState('ee');
+  const [startTime, setStartTime] = useState({});
   const [endTime, setEndTime] = useState({});
   const [category, setCategory] = useState("");
   const [day, setDay] = useState('')
   const [button, setButton] = useState(true)
+
+
+  const handleClick = () => {
+    if (!startTime) {
+      setButton(false)
+      setStartTime(DateTime.now())
+
+      const weekDay = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+      const dayStart = new Date()
+      setDay(weekDay[dayStart.getDay()]
+      
+      
+      ) 
+    } 
+    if (startTime && !endTime) {
+      setEndTime(DateTime.now())
+      setButton(true)
+      createLog({timeStart: startTime, timeEnd: endTime, category, day})
+    }
+  }
+
+
 
 console.log(startTime)
   return (
@@ -27,10 +49,9 @@ console.log(startTime)
             </div>
           <h2 className="text-3xl tracking-decentlyWide">00:08.15</h2>
         </form>
-        {/* <button onClick={()=> setStartTime("333") } >
-          {startTime && <button>pause</button>}
-    <i className="fa-solid fa-play playButtonTracking" />
-        </button> */}
+        <button onClick={()=> handleClick}>
+    <i className={`${button ? "fa-solid fa-play playButton" : "fa-solid fa-stop playButton"}`} />
+            </button>
       </div>
     </>
   );
