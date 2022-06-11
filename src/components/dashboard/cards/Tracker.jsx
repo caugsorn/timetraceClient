@@ -14,11 +14,49 @@ export default function Tracker() {
   const [stopwatchRunning, setStopwatchRunning] = useState(false)
 
 
-  const handleClick = () => {
+//   const handleClick = () => {
+//     setButton(!button)
+//     setStopwatchRunning(!stopwatchRunning)
+//   }
+
+//   useEffect((  ) => {
+// let interval;
+// if (stopwatchRunning) {
+//   interval = setInterval(() => {setTime(prev => prev+1)}, 1000);
+// } else if (!stopwatchRunning) {
+//   clearInterval(interval);
+//   setTime(0)
+// }
+// return () => clearInterval(interval)
+//   }, [stopwatchRunning])
+
+  // useEffect(() => { const dt= DateTime.now()
+  //   if (!button) {
+  //     setStartTime(dt)
+  //     const weekDay = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+  //     const dayStart = new Date()
+  //     // console.log(startTime)
+  //     setDay(weekDay[dayStart.getDay()]) 
+  //     // startTime.isLuxonDateTime && console.log(startTime.toISO())
+
+  //   } 
+  //   if (button) {
+  //     setEndTime(dt)
+  //     if(startTime&&endTime){
+  //     //  endTime.isLuxonDateTime && console.log(endTime.toISO())
+  //     createLog({timeStart: startTime, timeEnd: endTime, category, day})
+
+  //   }
+  //   }
+    
+  // }, [button])
+
+   const handleClick = () => {
     setButton(!button)
     setStopwatchRunning(!stopwatchRunning)
   }
 
+  //stopWatch -- count time as second
   useEffect((  ) => {
 let interval;
 if (stopwatchRunning) {
@@ -30,24 +68,18 @@ if (stopwatchRunning) {
 return () => clearInterval(interval)
   }, [stopwatchRunning])
 
-  useEffect(() => { const dt= DateTime.now()
+  //trace Started/Ended time
+  useEffect(() => { 
+    let dt = DateTime.local()
+    let dtJS = new Date()
     if (!button) {
       setStartTime(dt)
       const weekDay = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
-      const dayStart = new Date()
-      // console.log(startTime)
-      setDay(weekDay[dayStart.getDay()]) 
-      // startTime.isLuxonDateTime && console.log(startTime.toISO())
-
+      setDay(weekDay[dtJS.getDay()]) 
     } 
-    if (button) {
-      setEndTime(dt)
-      if(startTime&&endTime){
-      //  endTime.isLuxonDateTime && console.log(endTime.toISO())
-      createLog({timeStart: startTime, timeEnd: endTime, category, day})
-
-    }
-    }
+    if (button && Object.keys(startTime).length !== 0) {
+      createLog({timeStart: startTime, category, day, time});
+  }
     
   }, [button])
 

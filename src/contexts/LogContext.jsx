@@ -8,24 +8,41 @@ function LogContextProvider({children}) {
     ///?????
     const [log, setLog] = useState({});
 
-    const createLog = ({timeStart, timeEnd, category, day}) => {
-        if (timeStart.isLuxonDateTime && timeEnd.isLuxonDateTime) {
-        const timeSpan = timeStart.diff(timeEnd, 'milliseconds').toObject()
+    // const createLog = async ({timeStart, timeEnd, category, day}) => {
+    //     if (timeStart.isLuxonDateTime && timeEnd.isLuxonDateTime) {
+    //     const timeSpan = timeStart.diff(timeEnd, 'milliseconds').toObject()
+    //     const userId = 2
+    //     const value = {
+    //         userId,
+    //         timeStart,
+    //         timeEnd,
+    //         category,
+    //         timeSpan: timeSpan.seconds,
+    //         day,
+    //     }
+    //     // console.log(category)
+    //     // console.log(timeEnd.toISO())
+    //     // console.log(timeStart.toISO())
+    //     // console.log(timeSpan)
+    //     await createNewLog(value)
+    //     }
+    // }
+
+    const createLog = ({timeStart, category, day, time}) => {
+        const timeEnd = timeStart.plus({time}) 
         const value = {
             timeStart,
             timeEnd,
             category,
-            timeSpan: timeSpan.seconds,
+            timeSpan: time,
             day
         }
-        // console.log(category)
-        // console.log(timeEnd.toISO())
-        // console.log(timeStart.toISO())
-        // console.log(timeSpan)
+        console.log(time)
+        console.log(timeStart)
+        console.log(timeEnd)
+        
         // createNewLog(value)
-        }
-
-       
+    
     }
 
 

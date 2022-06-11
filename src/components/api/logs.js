@@ -1,7 +1,7 @@
 import axios from '../../config/axios';
 
-export const createNewLog = ({timeStart, timeEnd, category, day, timeSpan}) => {
-  return axios.post("/logs", { timeStart, timeEnd, category, day }).then((res) => {
+export const createNewLog = async ({timeStart, timeEnd, category, day, timeSpan, userId}) => {
+  return await axios.post("/logs/", { timeStart, timeEnd, category, day, userId }).then((res) => {
     return res.data.log;
   });
 };
