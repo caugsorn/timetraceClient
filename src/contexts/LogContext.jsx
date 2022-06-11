@@ -9,16 +9,20 @@ function LogContextProvider({children}) {
     const [log, setLog] = useState({});
 
     const createLog = ({timeStart, timeEnd, category, day}) => {
-        
-        const timeSpan = timeEnd.diff(timeStart).toObject()
+        if (timeStart.isLuxonDateTime && timeEnd.isLuxonDateTime) {
+        const timeSpan = timeStart.diff(timeEnd, 'seconds').toObject()
         const value = {
             timeStart,
             timeEnd,
             category,
-            timeSpan: timeSpan.milliseconds,
+            timeSpan: timeSpan.seconds,
             day
         }
-        createNewLog(value)
+        // console.log(timeSpan)
+        // createNewLog(value)
+        }
+
+       
     }
 
 

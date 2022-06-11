@@ -13,27 +13,35 @@ export default function Tracker() {
 
 
   const handleClick = () => {
-    if (!startTime) {
-      setButton(false)
-      setStartTime(DateTime.now())
-
-      const weekDay = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
-      const dayStart = new Date()
-      setDay(weekDay[dayStart.getDay()]
-      
-      
-      ) 
-    } 
-    if (startTime && !endTime) {
-      setEndTime(DateTime.now())
-      setButton(true)
-      createLog({timeStart: startTime, timeEnd: endTime, category, day})
-    }
+    setButton(!button)
   }
 
+  // useEffect(() => {
+  //   setButton(true)
+  // },[])
+
+  useEffect(() => { const dt= DateTime.now()
+    if (!button) {
+      setStartTime(dt)
+      const weekDay = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+      const dayStart = new Date()
+      // console.log(startTime)
+      setDay(weekDay[dayStart.getDay()]) 
+      // startTime.isLuxonDateTime && console.log(startTime.toISO())
+
+    } 
+    if (button) {
+      setEndTime(dt)
+      if(startTime&&endTime){
+      //  endTime.isLuxonDateTime && console.log(endTime.toISO())
+      createLog({timeStart: startTime, timeEnd: endTime, category, day})
+    }
+    }
+    
+  }, [button])
 
 
-console.log(startTime)
+
   return (
     <>
 
@@ -49,7 +57,7 @@ console.log(startTime)
             </div>
           <h2 className="text-3xl tracking-decentlyWide">00:08.15</h2>
         </form>
-        <button onClick={()=> handleClick}>
+        <button onClick={()=> handleClick()}>
     <i className={`${button ? "fa-solid fa-play playButton" : "fa-solid fa-stop playButton"}`} />
             </button>
       </div>
