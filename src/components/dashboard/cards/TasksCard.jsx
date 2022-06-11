@@ -38,11 +38,14 @@ export default function TasksCard() {
   ];
 
   return (
-    <>
-      <h3 className="pt-2 pl-4">Tasks</h3>
+    <div className="flex flex-col items-center ">
+      {/* Top priority  */}
+      <div className="w-10/12 flex flex-col gap-3">
+      <h3 className="pt-3">Tasks</h3>
       <div className="flex flex-col items-center">
-        <div className="card w-11/12 h-20 bg-lavender">
+        <div className="w-full h-20 bg-lavender rounded-md">
           <ul>
+            {/* //if el priority sorted asc top = top3 must proped highlighted */}
             {Taskss.map((el) => {
               return el.highlighted ? (
                 <TopPriorityTasks
@@ -54,14 +57,19 @@ export default function TasksCard() {
                 <></>
               );
             })}
-            )
+            
           </ul>
         </div>
-        <div className="w-11/12">
+        </div>
+
+        {/* newTask */}
+        <div>
           <h3>New Task</h3>
           <NewTask />
         </div>
-        <div className="w-11/12">
+
+          {/* allTasks */}
+        <div className="overflow-y-auto">
           <h3>All Tasks</h3>
           <ul>
             {Taskss.map((el) => {
@@ -74,6 +82,6 @@ export default function TasksCard() {
           </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 }

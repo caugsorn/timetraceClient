@@ -31,8 +31,8 @@ export default function LogContainer() {
         <div className="m-6 ml-6">
           <h3 className="mt-4 mb-1">Filter</h3>
           <ul>
-            {category.map((el) => (
-              <li className="list-none flex items-center overflow-auto font-light">
+            {category.map((el, idx) => (
+              <li  className="list-none flex items-center overflow-auto font-light">
                 <i className={`mr-4 fa-regular fa-circle`} />
                 {el.categoryName}
               </li>

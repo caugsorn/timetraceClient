@@ -1,32 +1,42 @@
-import useState from "react";
+import {useState, useEffect} from "react";
 
 function Priority() {
+  const [priority, setPriority] = useState(0)
+  const handleChange = e => {
+    const { value } = e.target;
+
+    setPriority({value})
+    console.log({priority})
+  }
+
+
+  function setColor(value) {
+return (`${(value)>priority? "text-silver": "text-purple"}`)
+  }
+
+
   return (
     <div className="fire">
-      <input type="radio" id="priority-1" name="priority" value="priority-1" />
-      <label for="priority-1">
-        <i className="fa-solid fa-fire" />
-      </label>
+      <button onClick={()=> setPriority(1)}>
+        <i className={`fa-solid fa-fire ${setColor(1)}`}/>
+      {/* </label> */}
+      </button>
 
-      <input type="radio" id="priority-2" name="priority" value="priority-2" />
-      <label for="priority-2">
-        <i className="fa-solid fa-fire" />
-      </label>
+    <button  onClick={()=> setPriority(2)}>
+        <i  className={`fa-solid fa-fire ${setColor(2)}`}/>
+      </button>
 
-      <input type="radio" id="priority-3" name="priority" value="priority-3" />
-      <label for="priority-3">
-        <i className="fa-solid fa-fire" />
-      </label>
+    <button onClick={()=> setPriority(3)}>
+        <i  className={`fa-solid fa-fire ${setColor(3)}`} />
+      </button>
 
-      <input type="radio" id="priority-4" name="priority" value="priority-4" />
-      <label for="priority-4">
-        <i className="fa-solid fa-fire" />
-      </label>
+      <button  onClick={()=> setPriority(4)}>
+        <i  className={`fa-solid fa-fire ${setColor(4)}`} />
+      </button>
 
-      <input type="radio" id="priority-5" name="priority" value="priority-5" />
-      <label for="priority-5">
-        <i className="fa-solid fa-fire" />
-      </label>
+    <button onClick={()=> setPriority(5)}>
+        <i  className={`fa-solid fa-fire ${setColor(5)}`}/>
+      </button>
     </div>
   );
 }
