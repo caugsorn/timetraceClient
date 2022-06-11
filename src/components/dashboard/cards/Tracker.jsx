@@ -10,15 +10,25 @@ export default function Tracker() {
   const [category, setCategory] = useState("");
   const [day, setDay] = useState('')
   const [button, setButton] = useState(true)
+  const [time, setTime] = useState(0)
+  const [stopwatchRunning, setStopwatchRunning] = useState(false)
 
 
   const handleClick = () => {
     setButton(!button)
+    setStopwatchRunning(!stopwatchRunning)
   }
 
-  // useEffect(() => {
-  //   setButton(true)
-  // },[])
+  useEffect((  ) => {
+let interval;
+if (stopwatchRunning) {
+  interval = setInterval(() => {setTime(prev => prev+1)}, 1000);
+} else if (!stopwatchRunning) {
+  clearInterval(interval);
+  setTime(0)
+}
+return () => clearInterval(interval)
+  }, [stopwatchRunning])
 
   useEffect(() => { const dt= DateTime.now()
     if (!button) {
@@ -35,11 +45,11 @@ export default function Tracker() {
       if(startTime&&endTime){
       //  endTime.isLuxonDateTime && console.log(endTime.toISO())
       createLog({timeStart: startTime, timeEnd: endTime, category, day})
+
     }
     }
     
   }, [button])
-
 
 
   return (
@@ -48,14 +58,18 @@ export default function Tracker() {
       <h3 className="p-6 ">Tracking</h3>
       <div className="flex flex-col items-center justify-center h-3/5">
         <form className="flex flex-col items-center">
-          <div className="w-11/12">
+          <div className="w-11/12 mb-3">
             <h4 className="text-silver text-xs  text-center tracking-widest font-semibold w-max">I'm working on...</h4>
           <input className="h-3/5 " onChange={(e) => {setCategory(e.target.value)}}  />
             {/* <label>
             I'm working on.....
             </label> */}
             </div>
-          <h2 className="text-3xl tracking-decentlyWide">00:08.15</h2>
+            <div className="stopwatch">
+          <span>{("0" + Math.floor((time / (60 * 60)))).slice(-2)}:</span>
+          <span>{("0" + Math.floor((time / 60) % 60)).slice(-2)}:</span>
+          <span>{("0" + Math.floor((time % 60))).slice(-2)}</span>
+            </div>
         </form>
         <button onClick={()=> handleClick()}>
     <i className={`${button ? "fa-solid fa-play playButton" : "fa-solid fa-stop playButton"}`} />
@@ -65,11 +79,3 @@ export default function Tracker() {
   );
 }
 
-
-          {/* // onClick1 = timeStart && new dateObject && set Icon to 'end'
-// onClick2 = timeEnd && set Icon to 'start'
-
-
-{/* // createLog({timeStart, timeEnd, category}) */}
-
-{/* // category???? ตอนเริ่มอาจจะยังไม่ได้ใส่ อาจจะใส่หลังกดเล่นได้ ควรส่งค่าไปเมื่ออัดเสร็จ */}

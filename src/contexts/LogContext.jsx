@@ -10,7 +10,7 @@ function LogContextProvider({children}) {
 
     const createLog = ({timeStart, timeEnd, category, day}) => {
         if (timeStart.isLuxonDateTime && timeEnd.isLuxonDateTime) {
-        const timeSpan = timeStart.diff(timeEnd, 'seconds').toObject()
+        const timeSpan = timeStart.diff(timeEnd, 'milliseconds').toObject()
         const value = {
             timeStart,
             timeEnd,
@@ -18,6 +18,9 @@ function LogContextProvider({children}) {
             timeSpan: timeSpan.seconds,
             day
         }
+        // console.log(category)
+        // console.log(timeEnd.toISO())
+        // console.log(timeStart.toISO())
         // console.log(timeSpan)
         // createNewLog(value)
         }

@@ -53,6 +53,10 @@ span {
 .buttonSecondary {
   @apply rounded-md text-purple border-[1.5px] border-purple  hover:ring-1;
 }
+
+.stopWatch span {
+  @apply text-purple tracking-decentlyWide font-medium text-3xl;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
