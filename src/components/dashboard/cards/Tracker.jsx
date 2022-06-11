@@ -6,13 +6,14 @@ export default function Tracker() {
   const {createLog} = useContext(LogContext);
 
   const [startTime, setStartTime] = useState({});
+  const [JStimeStart, setJSTimeStart] = useState(null)
   const [endTime, setEndTime] = useState({});
+  const [JStimeEnd, setJSTimeEnd] = useState(null)
   const [category, setCategory] = useState("");
   const [day, setDay] = useState('')
   const [button, setButton] = useState(true)
   const [time, setTime] = useState(0)
   const [stopwatchRunning, setStopwatchRunning] = useState(false)
-
 
   const handleClick = () => {
     setButton(!button)
@@ -30,27 +31,38 @@ if (stopwatchRunning) {
 return () => clearInterval(interval)
   }, [stopwatchRunning])
 
-  useEffect(() => { const dt= DateTime.now()
+  useEffect(() => { 
+    let dt = DateTime.local()
+    let dtJS = new Date()
     if (!button) {
       setStartTime(dt)
+      setJSTimeStart(dtJS)
       const weekDay = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
       const dayStart = new Date()
       // console.log(startTime)
-      setDay(weekDay[dayStart.getDay()]) 
+      setDay(weekDay[dtJS.getDay()]) 
       // startTime.isLuxonDateTime && console.log(startTime.toISO())
 
     } 
     if (button) {
       setEndTime(dt)
+      setJSTimeEnd(dtJS)
+      // console.log(endTime)
       if(startTime&&endTime){
       //  endTime.isLuxonDateTime && console.log(endTime.toISO())
-      createLog({timeStart: startTime, timeEnd: endTime, category, day})
-
+      createLog({timeStart: startTime, JStimeStart, timeEnd: endTime, JStimeEnd, category, day, time})
     }
     }
-    
   }, [button])
 
+
+  useEffect(()=> {
+    console.log(startTime)
+  },[startTime])
+
+   useEffect(()=> {
+    console.log(endTime)
+  },[endTime])
 
   return (
     <>
