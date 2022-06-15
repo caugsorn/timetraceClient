@@ -14,9 +14,9 @@ h3 {
   @apply font-black tracking-decentlyWide;
 }
 
-span {
+/* span {
   @apply text-purple tracking-decentlyWide font-medium;
-}
+} */
 
 .card {
   @apply rounded-3xl bg-white w-full h-full;
@@ -35,7 +35,7 @@ span {
 }
 
 .fire {
-  @apply m-1;
+  @apply  flex gap-1 mx-2;
 }
 
 .fire input[type="radio"] {
@@ -54,8 +54,16 @@ span {
   @apply rounded-md text-purple border-[1.5px] border-purple  hover:ring-1;
 }
 
-.stopWatch span {
-  @apply text-purple tracking-decentlyWide font-medium text-3xl;
+.stopwatch span {
+  @apply text-black tracking-decentlyWide font-medium text-3xl;
+}
+
+::-webkit-scrollbar{
+  @apply rounded-md border-solid border-2 border-lavender
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-md bg-lavender
 }
 @tailwind base;
 @tailwind components;

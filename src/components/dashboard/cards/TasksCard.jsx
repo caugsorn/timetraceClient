@@ -1,42 +1,13 @@
-import React from "react";
+import {useContext, useState} from 'react'
 import NewTask from "../../Tasks/NewTask";
 import Tasks from "../../Tasks/Tasks";
-import TopPriorityTasks from "../../Tasks/TopPriorityTasks";
+import {TaskContext} from '../../../contexts/TaskContext'
+// import TopPriorityTasks from "../../Tasks/TopPriorityTasks";
 
 export default function TasksCard() {
-  const Taskss = [
-    {
-      id: 1,
-      title: "Read database design",
-      completed: false,
-      highlighted: true,
-    },
-    {
-      id: 2,
-      title: "Read database design",
-      completed: false,
-      highlighted: false,
-    },
-    {
-      id: 3,
-      title: "Read database design",
-      completed: false,
-      highlighted: true,
-    },
-    {
-      id: 4,
-      title: "Read database design",
-      completed: false,
-      highlighted: false,
-    },
-    {
-      id: 5,
-      title: "Read database design",
-      completed: false,
-      highlighted: false,
-    },
-  ];
-
+  const [deleteMode, setDeleteMode] = useState(false);
+  const ctx = useContext(TaskContext);
+// console.log(ctx)
   return (
     <div className="flex flex-col items-center ">
       {/* Top priority  */}
@@ -46,7 +17,7 @@ export default function TasksCard() {
         <div className="w-full h-20 bg-lavender rounded-md">
           <ul>
             {/* //if el priority sorted asc top = top3 must proped highlighted */}
-            {Taskss.map((el) => {
+            {/* {Taskss.map((el) => {
               return el.highlighted ? (
                 <TopPriorityTasks
                   id={el.id}
@@ -56,26 +27,30 @@ export default function TasksCard() {
               ) : (
                 <></>
               );
-            })}
+            })} */}
             
           </ul>
         </div>
         </div>
-
-        {/* newTask */}
         <div>
           <h3>New Task</h3>
           <NewTask />
+           
         </div>
 
           {/* allTasks */}
-        <div className="overflow-y-auto">
+        <div>
+          <div className='flex justify-between'>
           <h3>All Tasks</h3>
-          <ul>
-            {Taskss.map((el) => {
+          <button onClick={() => setDeleteMode(!deleteMode)}>
+          <i className={`text-silver ${deleteMode ? 'fa-solid fa-list-check' : 'fa-solid fa-trash'}`} />
+            </button>
+          </div>
+          <ul className='overflow-y-auto h-24'>
+            {ctx.taskList.map((el) => {
               if (!el.highlighted) {
                 return (
-                  <Tasks id={el.id} title={el.title} completed={el.completed} />
+                  <Tasks key={el.id} id={el.id} title={el.title} completed={el.completed} priority={el.priority} deleteMode={deleteMode}/>
                 );
               }
             })}
