@@ -16,10 +16,9 @@ function LogContextProvider({children}) {
     const [categoryGraphData, setCategoryGraphData] = useState([]);
     const [weekId, setWeekId] = useState(DateTime.now().weekNumber)
 
-     const getLog = async (weekId) => {
-            console.log('weekId', weekId)
+     const getLog = async (week) => {
+            const inputWeek = week || DateTime.now().weekNumber
             const allLog = await getLogs(weekId);
-            console.log('allLog', allLog)
             setLogByDate(allLog.logsByDate);
             setCategoryByDate(allLog.category)
         } 

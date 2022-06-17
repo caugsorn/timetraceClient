@@ -8,6 +8,7 @@ export default function Logs({timeStart, timeEnd, timeSpan, category, onLogPage}
   const result = propsToDateTime.toLocaleString(DateTime.TIME_24_WITH_SECONDS);
   return result
 }
+console.log({timeStart}) 
   return (
     <div className="w-11/12 h-[56px] bg-[#F1F0F9] rounded-2xl overflow-hidden flex items-center justify-between">
       <div className="h-full flex flex-row items-center ">

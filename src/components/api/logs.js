@@ -1,4 +1,6 @@
 import axios from '../../config/axios';
+import { DateTime } from 'luxon';
+const weekNow = DateTime.now().weekNumber
 
 export const createNewLog = async ({timeStart, timeEnd, timeSpan, category, day, week,  userId, date}) => {
  
@@ -7,7 +9,7 @@ export const createNewLog = async ({timeStart, timeEnd, timeSpan, category, day,
   });
 };
 
-export const getLogs = async (weekId) => {
+export const getLogs = async (weekId = weekNow) => {
   const res = await axios.get(`/logs/${weekId}`)
         return {logsByDate: res.data.logGroupByDate, category: res.data.categoryForFilter}
     }

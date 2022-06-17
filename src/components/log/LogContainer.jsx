@@ -8,7 +8,30 @@ import { LogContext } from "../../contexts/LogContext";
 export default function LogContainer() {
   const ctx = useContext(LogContext);
   const param = useParams()
-  const category = [];
+
+  
+      const [filterCategory, setFilterCategory] = useState({})
+        // console.log(filterCategory)
+
+      // console.log(ctx.categoryByDate)
+      useEffect(()=> {
+        const categoryKeys = Object.keys(ctx.categoryByDate)
+        const categoryKeysObj = categoryKeys.reduce((acc, curr) =>  {
+          // console.log(acc)
+          // console.log(curr)
+          acc[curr] = true
+          return acc
+        }, {})
+        // console.log(categoryKeysObj)
+        setFilterCategory(categoryKeysObj)
+    },[ctx.categoryByDate])
+
+
+  
+
+
+
+  // const [categoryNow, setCategoryNow] = useContext([])
   // console.log(ctx.categoryByDate)
   // const [category, setCategory] = useState([]);
 
@@ -22,7 +45,12 @@ export default function LogContainer() {
   //     })
   //   setCategory(categories)
   // }},[])
-  console.log(ctx.logByDate)
+
+  const allLog = Object.values(ctx.logByDate)
+  
+ 
+
+  
 
   return (
     <div className="mx-8 space-y-4 mt-12 h-screen">
@@ -34,19 +62,21 @@ export default function LogContainer() {
         <div className="card">
             <h3 className="mt-4 mb-1">Filter</h3>
            <ul>
-            {Object.values(ctx.logByDate).map((el)=> {
-             return  el.map((element) => {
-                if(!category.includes(element.category)){
-                  category.push(element.category)
-                }})
-              })}
+           {/* {console.log(filterCategory)} */}
+            {Object.keys(ctx.categoryByDate).map((el) => { 
+              return <LogsFilter key={el} name={el} setFilterCategory={setFilterCategory} filterCategory={filterCategory}/>}
+            )}
 
           </ul> 
         </div>
          <div className="card col-span-2 h-full overflow-y-auto">
-        {Object.entries(ctx.logByDate).map((element,idx) => {   
+        {/* {Object.entries(ctx.logByDate).map((element,idx) => { 
+          console.log(element)
+          // element.filter(()=> filterCategory[element.cate])  
         return <Logcard key={idx} element={element[1]}/>
-        })}
+        })} */}
+         {(Object.values(ctx.logByDate).map((element,idx) => <Logcard key={element} element={element} filterCategory={filterCategory}/>))}
+
       </div>
       {/* </div> */}
      
