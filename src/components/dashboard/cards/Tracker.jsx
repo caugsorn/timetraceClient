@@ -42,7 +42,7 @@ return () => clearInterval(interval)
       setDay(weekDay[dtJS.getDay()]) 
       console.log(day)
       const getWeek = dt.weekNumber
-      setWeek(getWeek);      
+      setWeek(getWeek);     
     } 
     if (button && Object.keys(startTime).length !== 0) {
          createLog({timeStart: startTime, category, day, week, time});

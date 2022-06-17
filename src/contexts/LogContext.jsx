@@ -1,50 +1,29 @@
 import {createContext, useEffect, useState} from 'react'
 import { DateTime, diff } from 'luxon';
 import { createNewLog } from '../components/api/logs';
-import { getSum, compareToAverage,graphCategory, graphAverage } from '../components/api/logs';
+import { getSum, getLogs, compareToAverage,graphCategory, graphAverage } from '../components/api/logs';
 
 const LogContext = createContext();
 
 function LogContextProvider({children}) {
-    const [log, setLog] = useState([]);
+    const [logByDate, setLogByDate] = useState([]);
+    const [categoryByDate, setCategoryByDate] = useState([]);
+    const [logByCat, setLogByCat] = useState([]);
     const [sum, setSum] = useState(0);
     const [averageCompared, setAverageCompared] = useState(0);
+    const [averageGraphData, setAverageGraphData] = useState([]);
+    const [thisWeekGraphData, setThisWeekGraphData] = useState([]);
+    const [categoryGraphData, setCategoryGraphData] = useState([]);
+    const [weekId, setWeekId] = useState(DateTime.now().weekNumber)
+
+     const getLog = async (weekId) => {
+            console.log('weekId', weekId)
+            const allLog = await getLogs(weekId);
+            console.log('allLog', allLog)
+            setLogByDate(allLog.logsByDate);
+            setCategoryByDate(allLog.category)
+        } 
    
-//     {
-//     "averageWeekData": [
-//         {
-//             "day": "TUE",
-//             "sum": "5.8000"
-//         },
-//         {
-//             "day": "SUN",
-//             "sum": "3.5000"
-//         },
-//         {
-//             "day": "MON",
-//             "sum": "110.2143"
-//         }
-//     ],
-
-
-//     "thisWeekData": [
-//         {
-//             "day": "MON",
-//             "sum": "1543"
-//         },
-//         {
-//             "day": "TUE",
-//             "sum": "27"
-//         }
-//     ]
-// }
-
-
-
-//reduce ก้อน ถ้า averageWeekday(el.day === day )
-
-   
-
     useEffect(() => {
         const getTotal = async () => {
             const totalHour = await getSum();
@@ -52,7 +31,6 @@ function LogContextProvider({children}) {
         }
         getTotal();
     },[])
-
 
     useEffect(() => {
         const getAverage = async () => {
@@ -64,8 +42,8 @@ function LogContextProvider({children}) {
 
     useEffect(() => {
         const getCategoryGraph = async () => {
-            const cateforyData = await graphCategory();
-            console.log(cateforyData)
+            const categoryData = await graphCategory();
+            setCategoryGraphData(categoryData)
         }
         getCategoryGraph();
     }, [])
@@ -73,18 +51,17 @@ function LogContextProvider({children}) {
     useEffect(() => {
         const getWeeklyData = async () => {
             const weeklyData = await graphAverage();
-            console.log(weeklyData.averageWeek)
-            const averageWeek = default0ForGraph(weeklyData.averageWeek);
-            // console.log(averageWeekData)
+            
+            setAverageGraphData(weeklyData.averageWeek)
+            setThisWeekGraphData(weeklyData.thisWeek)    
         }
         getWeeklyData()
     }, [])
 
-     const default0ForGraph = (data) => {
-
-       
-
-    }
+    // useEffect(()=> {
+    //     getLog(weekId)
+    //     // console.log(weekId)
+    // }, [])
 
 
     const createLog = ({timeStart, category, day, week, time}) => {
@@ -95,13 +72,12 @@ function LogContextProvider({children}) {
             timeSpan: time,
             category,
             week,
-            day
+            day,
         }
         createNewLog(value)
     }
-
     return (
-        <LogContext.Provider value={{log, createLog,sum, averageCompared}}>{children} </LogContext.Provider>
+        <LogContext.Provider value={{logByDate, logByCat, createLog,sum, averageCompared, categoryGraphData, averageGraphData, thisWeekGraphData, weekId, setWeekId, getLog, categoryByDate}}>{children} </LogContext.Provider>
     )
 
 }

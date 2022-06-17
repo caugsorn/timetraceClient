@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import Menu from "./Menu";
 
@@ -13,7 +15,9 @@ export default function SideBar() {
             icon={"fa-solid fa-border-all"}
             isActive={true}
           />
-          <Menu link={"/logs"} title={"Log"} icon={"fa-regular fa-clipboard"} />
+          <Menu link={`/logs/${DateTime.now().weekNumber}`} title={"Log"} icon={"fa-regular fa-clipboard"} />
+          {/* <Link to={``} ></Link> */}
+          
           <Menu
             link={"/reports"}
             title={"Report"}
