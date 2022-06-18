@@ -16,6 +16,55 @@ function LogContextProvider({children}) {
     const [categoryGraphData, setCategoryGraphData] = useState([]);
     const [weekId, setWeekId] = useState(DateTime.now().weekNumber)
 
+    const [startTime, setStartTime] = useState({});
+    const [endTime, setEndTime] = useState({});
+    const [category, setCategory] = useState(null);
+    const [day, setDay] = useState('')
+    const [week, setWeek] = useState(0)
+    const [time, setTime] = useState(0)
+
+    const [mainButton,setMainButton] = useState(true)
+
+    const [stopwatchRunning, setStopwatchRunning] = useState(false)
+
+
+    const createLog = ({timeStart, category, day, week, time}) => {
+        const timeEnd = timeStart.plus({seconds: time}) 
+        const sendCatergory = category === null ? 'Untitled...' : category
+        const value = {
+            timeStart,
+            timeEnd,
+            timeSpan: time,
+            category : sendCatergory,
+            week,
+            day,
+        }
+        createNewLog(value)
+    }
+
+    const startTimer = (button) => {
+         let dt = DateTime.local()
+    let dtJS = new Date()
+    if (!button) {
+    // setMainButton(false)
+      setStartTime(dt)
+      const weekDay = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', ]
+      setDay(weekDay[dtJS.getDay()]) 
+      console.log(day)
+      const getWeek = dt.weekNumber
+      setWeek(getWeek);     
+    //   console.log('button start', button)
+    //   console.log('mainButton start', mainButton)
+    } 
+    if (button && Object.keys(startTime).length !== 0) {
+        // setMainButton(false)
+         createLog({timeStart: startTime, category, day, week, time});
+         setCategory(null)
+        //  console.log('button end', button)
+        //  console.log('mainButton end', mainButton)
+     }
+    }
+
      const getLog = async (week) => {
             const inputWeek = week || DateTime.now().weekNumber
             const allLog = await getLogs(weekId);
@@ -63,20 +112,8 @@ function LogContextProvider({children}) {
     // }, [])
 
 
-    const createLog = ({timeStart, category, day, week, time}) => {
-        const timeEnd = timeStart.plus({seconds: time}) 
-        const value = {
-            timeStart,
-            timeEnd,
-            timeSpan: time,
-            category,
-            week,
-            day,
-        }
-        createNewLog(value)
-    }
     return (
-        <LogContext.Provider value={{logByDate, logByCat, createLog,sum, averageCompared, categoryGraphData, averageGraphData, thisWeekGraphData, weekId, setWeekId, getLog, categoryByDate}}>{children} </LogContext.Provider>
+        <LogContext.Provider value={{startTimer, startTime,setStartTime, stopwatchRunning,setStopwatchRunning, setTime, time, category, setCategory, logByDate, logByCat, createLog,sum, averageCompared, categoryGraphData, averageGraphData, thisWeekGraphData, weekId, setWeekId, getLog, categoryByDate, mainButton, setMainButton}}>{children} </LogContext.Provider>
     )
 
 }

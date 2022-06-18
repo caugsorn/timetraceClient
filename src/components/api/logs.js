@@ -3,10 +3,8 @@ import { DateTime } from 'luxon';
 const weekNow = DateTime.now().weekNumber
 
 export const createNewLog = async ({timeStart, timeEnd, timeSpan, category, day, week,  userId, date}) => {
- 
-  return await axios.post("/logs/", { timeStart, timeEnd, timeSpan, category, day, week, userId, date}).then((res) => {
-    return res.data.log;
-  });
+  const res = await axios.post("/logs/", { timeStart, timeEnd, timeSpan, category, day, week, userId, date})
+  return res.data.log;
 };
 
 export const getLogs = async (weekId = weekNow) => {

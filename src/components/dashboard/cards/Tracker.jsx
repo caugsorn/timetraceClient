@@ -4,52 +4,34 @@ import { LogContext } from '../../../contexts/LogContext'
 import TimeFormat from "../../time/TimeFormat";
 
 export default function Tracker() {
-  const {createLog} = useContext(LogContext);
-  const [startTime, setStartTime] = useState({});
-  const [endTime, setEndTime] = useState({});
-  const [category, setCategory] = useState(undefined);
-  const [day, setDay] = useState('')
-  const [week, setWeek] = useState(0)
+  const ctx = useContext(LogContext);
+  
   const [button, setButton] = useState(true)
-  const [time, setTime] = useState(0)
-  const [stopwatchRunning, setStopwatchRunning] = useState(false)
-
 
    const handleClick = () => {
-    setButton(!button)
-    setStopwatchRunning(!stopwatchRunning)
+    // setButton(!button)
+    console.log(button)
+    ctx.setMainButton(!ctx.mainButton)
+    ctx.setStopwatchRunning(!ctx.stopwatchRunning)
+    console.log('clicked')
   }
 
   //stopWatch -- count time as second
   useEffect((  ) => {
 let interval;
-if (stopwatchRunning) {
-  interval = setInterval(() => {setTime(prev => prev+1)}, 1000);
-} else if (!stopwatchRunning) {
+if (ctx.stopwatchRunning) {
+  interval = setInterval(() => {ctx.setTime(prev => prev+1)}, 1000);
+} else if (!ctx.stopwatchRunning) {
   clearInterval(interval);
-  setTime(0)
+  ctx.setTime(0)
 }
 return () => clearInterval(interval)
-  }, [stopwatchRunning])
+  }, [ctx.stopwatchRunning])
 
   //trace Started/Ended time
   useEffect(() => { 
-    let dt = DateTime.local()
-    let dtJS = new Date()
-    if (!button) {
-      setStartTime(dt)
-      const weekDay = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', ]
-      setDay(weekDay[dtJS.getDay()]) 
-      console.log(day)
-      const getWeek = dt.weekNumber
-      setWeek(getWeek);     
-    } 
-    if (button && Object.keys(startTime).length !== 0) {
-         createLog({timeStart: startTime, category, day, week, time});
-         setCategory(undefined)
-     }
-    
-  }, [button])
+    ctx.startTimer(ctx.mainButton)
+  }, [ctx.mainButton])
   return (
     <>
 
@@ -58,14 +40,14 @@ return () => clearInterval(interval)
         <form className="flex flex-col items-center">
           <div className="mb-3">
             <h4 className="text-silver text-xs tracking-widest font-medium w-max">I'm working on...</h4>
-          <input className="h-3/5 " onChange={(e) => {setCategory(e.target.value)}}  />
+          <input className="h-3/5 " value={ctx.category || ''} onChange={(e) => {ctx.setCategory(e.target.value)}}  />
             </div>
             <div className="stopwatch mb-4">
-            <TimeFormat time={time}/>
+            <TimeFormat time={ctx.time}/>
             </div>
         </form>
         <button onClick={()=> handleClick()}>
-    <i className={`${button ? "fa-solid fa-play playButton" : "fa-solid fa-stop playButton"}`} />
+    <i className={`${!ctx.mainButton ? "fa-solid fa-stop playButton" :  "fa-solid fa-play playButton"}`} />
             </button>
       </div>
     </>

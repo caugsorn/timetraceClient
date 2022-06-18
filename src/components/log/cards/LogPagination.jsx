@@ -31,9 +31,10 @@ export default function LogPagination() {
       <button onClick={()=> decreaseWeek()}>
         <i className="fa-solid fa-angle-left" />
       </button>
-        {
-          pathWeekId
-        }
+      <div>
+      <span>week #</span>
+        <span>{pathWeekId}</span>
+        </div>
       <button onClick={()=> increaseWeek()}>
         <i className="fa-solid fa-angle-right"/>
       </button>
