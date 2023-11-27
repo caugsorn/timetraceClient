@@ -11,20 +11,18 @@ import { createContext, useContext } from "react";
 import { LogContext } from "../contexts/LogContext";
 
 export default function Router() {
- const {weekId} = useContext(LogContext)
+  const { weekId } = useContext(LogContext);
 
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="home" element={<HomePage />} />
         <Route path="logs/:weekId" element={<LogPage />} />
-          
         <Route path="reports" element={<ReportPage />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-
-      {/* <Route path="/*" element={<Navigate to="/login" />} /> */}
+      <Route path="/*" element={<Navigate to="/login" />} />
     </Routes>
   );
 }

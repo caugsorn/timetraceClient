@@ -19,6 +19,7 @@ module.exports = {
       gray: "#E8EDF1",
       black: "#191944",
       silver: "#A3AED0",
+      red: "#BF0A30"
     },
     extend: {
       fontFamily: { sans: ["Poppins", "sans-serif"] },

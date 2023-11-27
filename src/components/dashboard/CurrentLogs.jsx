@@ -3,10 +3,10 @@ import Logs from "../log/Logs";
 import { LogContext } from "../../contexts/LogContext";
 
 export default function CurrentLogs() {
+  const ctx = useContext(LogContext);
   useEffect(()=>{
     ctx.getLog()
   },[])
-  const ctx = useContext(LogContext)
   console.log(ctx.logByDate)
   return (
     <div className="h-full ">
