@@ -15,5 +15,5 @@ export const login = async (username, password) => {
     username,
     password,
   });
-  return res.response;
+  return res;
 };
