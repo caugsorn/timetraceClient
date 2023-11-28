@@ -1,40 +1,24 @@
-import { useEffect, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { LogContext } from "../../../contexts/LogContext";
 import TimeFormat from "../../time/TimeFormat";
 import { DateTime } from "luxon";
 
 export default function Tracker() {
   const ctx = useContext(LogContext);
-  const [isRunning, setIsRunning] = useState(false);
-  const [startTime, setStartTime] = useState({});
-  const [timeSpan, setTimeSpan] = useState(0);
-  const [category, setCategory] = useState("");
-
+  console.log("1", ctx.isRunning);
   const handleClick = () => {
     //howToDeal with first time running?
-    setIsRunning(!isRunning);
-    console.log("out", isRunning);
-
-    if (isRunning) {
+    console.log("2", ctx.isRunning);
+    ctx.setIsRunning(!ctx.isRunning);
+    console.log("out", ctx.isRunning);
+    const startTime = DateTime.now();
+    if (ctx.isRunning) {
       console.log("in");
-      ctx.logEnded(startTime, timeSpan, category);
+      ctx.logEnded(startTime, ctx.timeSpan, ctx.category);
+    } else {
+      ctx.setStartTime(startTime);
     }
   };
-
-  useEffect(() => {
-    let interval;
-    if (isRunning) {
-      setStartTime(DateTime.local());
-      interval = setInterval(() => {
-        setTimeSpan((prev) => prev + 1);
-      }, 1000);
-    } else {
-      clearInterval(interval);
-      setTimeSpan(0);
-    }
-    return () => clearInterval(interval);
-  }, [isRunning]);
-
   return (
     <>
       <h3 className="p-6 ">Tracking</h3>
@@ -46,20 +30,20 @@ export default function Tracker() {
             </h4>
             <input
               className="h-3/5 "
-              value={category || ""}
+              value={ctx.category}
               onChange={(e) => {
-                setCategory(e.target.value);
+                ctx.setCategory(e.target.value);
               }}
             />
           </div>
           <div className="stopwatch mb-4">
-            <TimeFormat time={timeSpan} />
+            <TimeFormat time={ctx.timeSpan} />
           </div>
         </form>
         <button onClick={() => handleClick()}>
           <i
             className={`${
-              isRunning
+              ctx.isRunning
                 ? "fa-solid fa-stop playButton"
                 : "fa-solid fa-play playButton"
             }`}

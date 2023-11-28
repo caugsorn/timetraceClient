@@ -21,21 +21,38 @@ function LogContextProvider({ children }) {
   const [thisWeekGraphData, setThisWeekGraphData] = useState([]);
   const [categoryGraphData, setCategoryGraphData] = useState([]);
   const [weekId, setWeekId] = useState(DateTime.now().weekNumber);
+  const [startTime, setStartTime] = useState({});
+  const [timeSpan, setTimeSpan] = useState(0);
+  const [category, setCategory] = useState("");
+  const [isRunning, setIsRunning] = useState(false);
 
-  
+  useEffect(() => {
+    let interval;
+    if (isRunning) {
+      setStartTime(DateTime.local());
+      interval = setInterval(() => {
+        setTimeSpan((prev) => prev + 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+      setTimeSpan(0);
+    }
+    return () => clearInterval(interval);
+  }, [isRunning]);
 
-  const createLog = ({ timeStart, category, day, week, time }) => {
-    const timeEnd = timeStart.plus({ seconds: time });
+  const createLog = ({ timeStart, category, day, week, timeSpan }) => {
+    const timeEnd = timeStart.plus({ seconds: timeSpan });
     const sendCatergory = category === "" ? "Untitled..." : category;
     const value = {
       timeStart,
       timeEnd,
-      timeSpan: time,
+      timeSpan: timeSpan,
       category: sendCatergory,
       week,
       day,
     };
     console.log("about to create new log");
+    setCategory("");
     createNewLog(value);
   };
 
@@ -45,6 +62,7 @@ function LogContextProvider({ children }) {
     const day = weekDayShortname[dt.weekday - 1];
     const week = dt.weekNumber;
     if (Object.keys(timeStart).length !== 0) {
+      console.log("hey time", timeSpan);
       createLog({ timeStart: timeStart, category, day, week, timeSpan });
     }
   };
@@ -97,15 +115,14 @@ function LogContextProvider({ children }) {
   return (
     <LogContext.Provider
       value={{
-        // startTimer,
-        // startTime,
-        // setStartTime,
-        // stopwatchRunning,
-        // setStopwatchRunning,
-        // setTime,
-        // time,
-        // category,
-        // setCategory,
+        startTime,
+        setStartTime,
+        timeSpan,
+        setTimeSpan,
+        category,
+        setCategory,
+        isRunning,
+        setIsRunning,
         logEnded,
         logByDate,
         logByCat,
@@ -119,8 +136,6 @@ function LogContextProvider({ children }) {
         setWeekId,
         getLog,
         categoryByDate,
-        // mainButton,
-        // setMainButton,
       }}
     >
       {children}{" "}
