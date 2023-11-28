@@ -4,15 +4,14 @@ import { DateTime } from "luxon";
 import { useEffect } from "react";
 
 export default function Task({ id, title, completed, priority, deleteMode}) {
-  const ctx = useContext(TaskContext);
+  const {updateTask, removeTask, isNeedFetchingCount, setIsNeedFetchingCount} = useContext(TaskContext);
   const [week, setWeek] = useState(0);
   const [isClick, setIsClick] = useState(false);
   const handleClick = async () => {
     setIsClick(!isClick);
-    ctx.updateTask(id, { completed: !completed, week });
+    updateTask(id, { completed: !completed, week });
+    setIsNeedFetchingCount(!isNeedFetchingCount);
   }
-
-  
 
   useEffect(() => {const dt = DateTime.local().weekNumber
     setWeek(dt)}
@@ -29,7 +28,7 @@ export default function Task({ id, title, completed, priority, deleteMode}) {
         <span className="break-all">{title}</span>
         </div>
 
-        {deleteMode ?<button onClick={()=> ctx.removeTask(id) }>
+        {deleteMode ?<button onClick={()=> removeTask(id) }>
                   <i className="fa-solid fa-xmark text-silver mx-2" />
                 </button>
         :                

@@ -28,11 +28,25 @@ function LogContextProvider({ children }) {
   const [day, setDay] = useState("");
   const [week, setWeek] = useState(0);
   const [time, setTime] = useState(0);
-
   const [mainButton, setMainButton] = useState(true);
-
   const [stopwatchRunning, setStopwatchRunning] = useState(false);
+  const [log, setLog] = useState({});
 
+  // const createLog = ({timeStart, category, day, time}) => {
+  //     const timeEnd = timeStart.plus({seconds: '222312'})
+
+  //     const value = {
+  //         timeStart,
+  //         timeEnd,
+  //         category,
+  //         timeSpan: time,
+  //         day
+  //     }
+  //     console.log(time)
+  //     console.log(timeStart)
+  //     console.log(timeEnd)
+  //     createNewLog(value)
+  //   };
   const createLog = ({ timeStart, category, day, week, time }) => {
     const timeEnd = timeStart.plus({ seconds: time });
     const sendCatergory = category === null ? "Untitled..." : category;
@@ -44,20 +58,22 @@ function LogContextProvider({ children }) {
       week,
       day,
     };
+    console.log("about to create new log");
     createNewLog(value);
   };
 
   const startTimer = (button) => {
     let dt = DateTime.local();
     let dtJS = new Date();
+    console.log("in start timer button:", button);
     if (!button) {
       setStartTime(dt);
       const weekDay = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
       setDay(weekDay[dtJS.getDay()]);
       const getWeek = dt.weekNumber;
       setWeek(getWeek);
-
-      if (button && Object.keys(startTime).length !== 0) {
+      console.log("in button", button, Object.keys(startTime));
+      if (Object.keys(startTime).length !== 0) {
         createLog({ timeStart: startTime, category, day, week, time });
         setCategory(null);
       }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../components/api/user";
+import { setAccessToken } from "../services/localStorage";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -10,7 +11,10 @@ export default function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     await login(username, password)
-      .then(() => navigate("/home"))
+      .then((res) => {
+        navigate("/home");
+        setAccessToken(res.data.token);
+      })
       .catch((err) => setErrorMsg(err.response.data.message));
   };
 
