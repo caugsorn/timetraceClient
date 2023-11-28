@@ -22,34 +22,11 @@ function LogContextProvider({ children }) {
   const [categoryGraphData, setCategoryGraphData] = useState([]);
   const [weekId, setWeekId] = useState(DateTime.now().weekNumber);
 
-  const [startTime, setStartTime] = useState({});
-  const [endTime, setEndTime] = useState({});
-  const [category, setCategory] = useState(null);
-  const [day, setDay] = useState("");
-  const [week, setWeek] = useState(0);
-  const [time, setTime] = useState(0);
-  const [mainButton, setMainButton] = useState(true);
-  const [stopwatchRunning, setStopwatchRunning] = useState(false);
-  const [log, setLog] = useState({});
+  
 
-  // const createLog = ({timeStart, category, day, time}) => {
-  //     const timeEnd = timeStart.plus({seconds: '222312'})
-
-  //     const value = {
-  //         timeStart,
-  //         timeEnd,
-  //         category,
-  //         timeSpan: time,
-  //         day
-  //     }
-  //     console.log(time)
-  //     console.log(timeStart)
-  //     console.log(timeEnd)
-  //     createNewLog(value)
-  //   };
   const createLog = ({ timeStart, category, day, week, time }) => {
     const timeEnd = timeStart.plus({ seconds: time });
-    const sendCatergory = category === null ? "Untitled..." : category;
+    const sendCatergory = category === "" ? "Untitled..." : category;
     const value = {
       timeStart,
       timeEnd,
@@ -62,24 +39,15 @@ function LogContextProvider({ children }) {
     createNewLog(value);
   };
 
-  const startTimer = (button) => {
-    let dt = DateTime.local();
-    let dtJS = new Date();
-    console.log("in start timer button:", button);
-    if (!button) {
-      setStartTime(dt);
-      const weekDay = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-      setDay(weekDay[dtJS.getDay()]);
-      const getWeek = dt.weekNumber;
-      setWeek(getWeek);
-      console.log("in button", button, Object.keys(startTime));
-      if (Object.keys(startTime).length !== 0) {
-        createLog({ timeStart: startTime, category, day, week, time });
-        setCategory(null);
-      }
+  const logEnded = (timeStart, timeSpan, category) => {
+    const weekDayShortname = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+    const dt = DateTime.now();
+    const day = weekDayShortname[dt.weekday - 1];
+    const week = dt.weekNumber;
+    if (Object.keys(timeStart).length !== 0) {
+      createLog({ timeStart: timeStart, category, day, week, timeSpan });
     }
   };
-
   const getLog = async (week) => {
     const inputWeek = week || DateTime.now().weekNumber;
     const allLog = await getLogs(weekId);
@@ -129,15 +97,16 @@ function LogContextProvider({ children }) {
   return (
     <LogContext.Provider
       value={{
-        startTimer,
-        startTime,
-        setStartTime,
-        stopwatchRunning,
-        setStopwatchRunning,
-        setTime,
-        time,
-        category,
-        setCategory,
+        // startTimer,
+        // startTime,
+        // setStartTime,
+        // stopwatchRunning,
+        // setStopwatchRunning,
+        // setTime,
+        // time,
+        // category,
+        // setCategory,
+        logEnded,
         logByDate,
         logByCat,
         createLog,
@@ -150,8 +119,8 @@ function LogContextProvider({ children }) {
         setWeekId,
         getLog,
         categoryByDate,
-        mainButton,
-        setMainButton,
+        // mainButton,
+        // setMainButton,
       }}
     >
       {children}{" "}

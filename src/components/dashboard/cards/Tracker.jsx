@@ -1,40 +1,40 @@
-import { useState, useEffect, useContext } from "react";
-import { DateTime } from "luxon";
+import { useEffect, useContext, useState } from "react";
 import { LogContext } from "../../../contexts/LogContext";
 import TimeFormat from "../../time/TimeFormat";
+import { DateTime } from "luxon";
 
 export default function Tracker() {
   const ctx = useContext(LogContext);
-
-  const [button, setButton] = useState(true);
+  const [isRunning, setIsRunning] = useState(false);
+  const [startTime, setStartTime] = useState({});
+  const [timeSpan, setTimeSpan] = useState(0);
+  const [category, setCategory] = useState("");
 
   const handleClick = () => {
-    console.log(button);
-    ctx.setMainButton(!ctx.mainButton);
-    ctx.setStopwatchRunning(!ctx.stopwatchRunning);
+    //howToDeal with first time running?
+    setIsRunning(!isRunning);
+    console.log("out", isRunning);
 
-    if (!ctx.mainButton && !ctx.stopwatchRunning) {
-      ctx.startTimer(ctx.mainButton);
+    if (isRunning) {
+      console.log("in");
+      ctx.logEnded(startTime, timeSpan, category);
     }
   };
 
   useEffect(() => {
     let interval;
-    if (ctx.stopwatchRunning) {
+    if (isRunning) {
+      setStartTime(DateTime.local());
       interval = setInterval(() => {
-        ctx.setTime((prev) => prev + 1);
+        setTimeSpan((prev) => prev + 1);
       }, 1000);
-    } else if (!ctx.stopwatchRunning) {
+    } else {
       clearInterval(interval);
-      ctx.setTime(0);
+      setTimeSpan(0);
     }
     return () => clearInterval(interval);
-  }, [ctx.stopwatchRunning]);
+  }, [isRunning]);
 
-  //trace Started/Ended time
-  useEffect(() => {
-    ctx.startTimer(ctx.mainButton);
-  }, [ctx.mainButton]);
   return (
     <>
       <h3 className="p-6 ">Tracking</h3>
@@ -46,20 +46,20 @@ export default function Tracker() {
             </h4>
             <input
               className="h-3/5 "
-              value={ctx.category || ""}
+              value={category || ""}
               onChange={(e) => {
-                ctx.setCategory(e.target.value);
+                setCategory(e.target.value);
               }}
             />
           </div>
           <div className="stopwatch mb-4">
-            <TimeFormat time={ctx.time} />
+            <TimeFormat time={timeSpan} />
           </div>
         </form>
         <button onClick={() => handleClick()}>
           <i
             className={`${
-              !ctx.mainButton
+              isRunning
                 ? "fa-solid fa-stop playButton"
                 : "fa-solid fa-play playButton"
             }`}
