@@ -5,6 +5,7 @@ import {
   getSum,
   getLogs,
   compareToAverage,
+  getCurLogsByCat,
   graphCategory,
   graphAverage,
 } from "../components/api/logs";
@@ -16,6 +17,7 @@ function LogContextProvider({ children }) {
   const [categoryByDate, setCategoryByDate] = useState([]);
   const [logByCat, setLogByCat] = useState([]);
   const [sum, setSum] = useState(0);
+  const [average, setAverage] = useState(0);
   const [averageCompared, setAverageCompared] = useState(0);
   const [averageGraphData, setAverageGraphData] = useState([]);
   const [thisWeekGraphData, setThisWeekGraphData] = useState([]);
@@ -51,7 +53,6 @@ function LogContextProvider({ children }) {
       week,
       day,
     };
-    console.log("about to create new log");
     setCategory("");
     createNewLog(value);
   };
@@ -74,20 +75,30 @@ function LogContextProvider({ children }) {
   };
 
   useEffect(() => {
+    const getLogByCat = async () => {
+      const curLogs = await getCurLogsByCat();
+      setLogByCat(curLogs);
+    };
+    getLogByCat();
+  }, [isRunning]);
+
+  useEffect(() => {
     const getTotal = async () => {
       const totalHour = await getSum();
       setSum(totalHour);
     };
     getTotal();
-  }, []);
+  }, [isRunning]);
 
   useEffect(() => {
-    const getAverage = async () => {
-      const average = await compareToAverage();
-      setAverageCompared(average.toFixed(2));
+    const getAverage = async ({ week }) => {
+      const res = await compareToAverage(week);
+      setAverageCompared(res.averageCompared.toFixed(2));
+      setAverage(res.average.toFixed(2));
     };
-    getAverage();
-  }, []);
+    const week = DateTime.now().weekNumber;
+    getAverage(week);
+  }, [isRunning]);
 
   useEffect(() => {
     const getCategoryGraph = async () => {
@@ -107,17 +118,13 @@ function LogContextProvider({ children }) {
     getWeeklyData();
   }, []);
 
-  // useEffect(()=> {
-  //     getLog(weekId)
-  //     // console.log(weekId)
-  // }, [])
-
   return (
     <LogContext.Provider
       value={{
         startTime,
         setStartTime,
         timeSpan,
+        average,
         setTimeSpan,
         category,
         setCategory,

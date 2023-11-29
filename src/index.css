@@ -14,9 +14,9 @@ h3 {
   @apply font-black tracking-decentlyWide;
 }
 
-/* span {
+span {
   @apply text-purple tracking-decentlyWide font-medium;
-} */
+}
 
 .card {
   @apply rounded-3xl bg-white w-full h-full;
