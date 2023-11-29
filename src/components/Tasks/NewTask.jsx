@@ -22,8 +22,6 @@ function NewTask() {
     const task = createNewTask(title, priority);
     task
       .then(() => {
-        // const newTaskList = [newTask.data.tasks, ...taskList];
-        // setTaskList(newTaskList);
         setTitle("");
         setPriority(0);
         setIsNeedFetchingCard(!isNeedFetchingCard);
@@ -32,9 +30,6 @@ function NewTask() {
         console.log(err);
       });
     setTitle("");
-    // const thisWeek = DateTime.now().weekNumber
-    // console.log('set in')
-    // setWeek(thisWeek)
   };
 
   return (

@@ -6,12 +6,9 @@ import { DateTime } from "luxon";
 export default function Tracker() {
   const ctx = useContext(LogContext);
   const handleClick = () => {
-    //howToDeal with first time running?
     ctx.setIsRunning(!ctx.isRunning);
-    console.log("out", ctx.isRunning);
     const startTime = DateTime.now();
     if (ctx.isRunning) {
-      console.log("in");
       ctx.logEnded(startTime, ctx.timeSpan, ctx.category);
     } else {
       ctx.setStartTime(startTime);

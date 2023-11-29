@@ -1,6 +1,4 @@
 import axios from "../../config/axios";
-import { DateTime } from "luxon";
-const weekNow = DateTime.now().weekNumber;
 
 export const createNewLog = async ({
   timeStart,
@@ -25,7 +23,7 @@ export const createNewLog = async ({
   return res.data.log;
 };
 
-export const getLogs = async (weekId = weekNow) => {
+export const getLogs = async (weekId) => {
   const res = await axios.get(`/logs/${weekId}`);
   return {
     logsByDate: res.data.logGroupByDate,
@@ -44,7 +42,7 @@ export const getSum = async () => {
   return res.data.sum;
 };
 
-export const compareToAverage = async ({week}) => {
+export const compareToAverage = async ({ week }) => {
   const res = await axios.get("/logs/analytics/average");
   return res.data;
 };

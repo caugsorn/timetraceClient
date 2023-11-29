@@ -3,9 +3,9 @@ import DashboardContainer from "../components/dashboard/DashboardContainer";
 
 function Home() {
   return (
-    <div>
+    <>
       <DashboardContainer />
-    </div>
+    </>
   );
 }
 

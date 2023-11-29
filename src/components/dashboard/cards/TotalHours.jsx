@@ -1,9 +1,13 @@
-import {useContext} from "react";
+import { useContext, useEffect } from "react";
 import { LogContext } from "../../../contexts/LogContext";
 import TimeFormat from "../../time/TimeFormat";
- 
+
 export default function TotalHours() {
   const ctx = useContext(LogContext);
+  // not rerendred 
+  // useEffect(() => {
+  //   console.log("TotalHours component rerendered", ctx.sum);
+  // }, [ctx.sum]);
   return (
     <div className="grid grid-cols-2 grid-rows-2 h-full">
       <h5 className="col-start-1 row-start-1 text-right self-end text-2xl">

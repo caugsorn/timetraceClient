@@ -24,21 +24,23 @@ function TaskContextProvider({ children }) {
       });
   }, [isNeedFetchingCard]);
 
-  //todo: update taskList realtime
-  //   useEffect(() => {}, taskList);
-
-  //    useEffect(() => {
-  //     const count = getTaskCount();
-  //     count
-  //     .then((result) => {
-  //         console.log(`this is result ${result}`)
-  //         setTaskCount(result);
-  //     })
-  //     .catch((err) => {
-  //         console.log(err);
-  //     });
-  // }, []);
-
+  const getUpdateListTasks = async () => {
+    try {
+      const tasks = await getAllTasks();
+      setTaskList(tasks);
+    } catch (error) {
+      console.error("getUpdateListTasks error", error);
+    }
+  };
+  const getUpdateCount = async () => {
+    try {
+      const count = await getTaskCount();
+      setTaskCount(count);
+    } catch (error) {
+      console.error("getUpdateCount error", error);
+    }
+  };
+ 
   useEffect(() => {
     const fetchCount = async () => {
       const count = await getTaskCount();
@@ -51,11 +53,12 @@ function TaskContextProvider({ children }) {
     axios
       .delete(`/tasks/${id}`)
       .then(() => {
-        // console.log(id)
         const idx = taskList.findIndex((el) => el.id === id);
         const clonedTaskList = [...taskList];
         clonedTaskList.splice(idx, 1);
         setTaskList(clonedTaskList);
+        getUpdateListTasks();
+        getUpdateCount();
       })
       .catch((err) => {
         console.log(err);
@@ -69,6 +72,8 @@ function TaskContextProvider({ children }) {
       clonedTaskList[idx] = { ...clonedTaskList[idx], value };
       setTaskList(clonedTaskList);
       // clonedTaskList[idx].completed = !clonedTaskList[idx].completed;
+      getUpdateListTasks();
+      getUpdateCount();
     });
   };
 
@@ -83,9 +88,10 @@ function TaskContextProvider({ children }) {
         setIsNeedFetchingCard,
         isNeedFetchingCount,
         setIsNeedFetchingCount,
+        getUpdateListTasks,
       }}
     >
-      {children}{" "}
+      {children}
     </TaskContext.Provider>
   );
 }

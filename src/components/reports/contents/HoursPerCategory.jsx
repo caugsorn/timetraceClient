@@ -10,37 +10,53 @@
 //   Tooltip,
 //   Legend,
 // } from 'chart.js';
-import 'chart.js/auto';
+import "chart.js/auto";
 
 import { useContext } from "react";
 import { LogContext } from "../../../contexts/LogContext";
 
-import { Chart, Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, LineController, LineElement, PointElement, LinearScale, Title, Legend } from 'chart.js';
+import { Chart, Doughnut } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  Legend,
+} from "chart.js";
 
-ChartJS.register(LineController, LineElement, PointElement, LinearScale, Title, Legend);
-
+ChartJS.register(
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  Legend
+);
 
 export default function HoursPerCategory() {
-    const ctx = useContext(LogContext);
-    // console.log(ctx)
-    const data = {
-        labels: ctx.categoryGraphData.map((category) => category.category),
-        datasets: [
-            {label: 'hour(s)', 
-            data: ctx.categoryGraphData.map((category) => category.sum),
-    }
-        ],
-    }
-    const options = {  plugins:{
-   legend: {
-    position: 'right',
-    align: 'start'
-   }
-  }
- }
-  return (<div className="w-3/5 h-3/5">
-    {/* {console.log(ctx)} */}
-    <Doughnut data={data} option={options}/>
-    </div>)
+  const ctx = useContext(LogContext);
+  const data = {
+    labels: ctx.categoryGraphData.map((category) => category.category),
+    datasets: [
+      {
+        label: "hour(s)",
+        data: ctx.categoryGraphData.map((category) => category.sum),
+      },
+    ],
+  };
+  const options = {
+    plugins: {
+      legend: {
+        position: "right",
+        align: "start",
+      },
+    },
+  };
+  return (
+    <div className="w-3/5 h-3/5">
+      <Doughnut data={data} option={options} />
+    </div>
+  );
 }

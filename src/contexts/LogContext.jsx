@@ -22,11 +22,12 @@ function LogContextProvider({ children }) {
   const [averageGraphData, setAverageGraphData] = useState([]);
   const [thisWeekGraphData, setThisWeekGraphData] = useState([]);
   const [categoryGraphData, setCategoryGraphData] = useState([]);
-  const [weekId, setWeekId] = useState(DateTime.now().weekNumber);
+  const [weekId, setWeekId] = useState(null);
   const [startTime, setStartTime] = useState({});
   const [timeSpan, setTimeSpan] = useState(0);
   const [category, setCategory] = useState("");
   const [isRunning, setIsRunning] = useState(false);
+  const [fetch, setFetch] = useState(false);
 
   useEffect(() => {
     let interval;
@@ -42,7 +43,7 @@ function LogContextProvider({ children }) {
     return () => clearInterval(interval);
   }, [isRunning]);
 
-  const createLog = ({ timeStart, category, day, week, timeSpan }) => {
+  const createLog = async ({ timeStart, category, day, week, timeSpan }) => {
     const timeEnd = timeStart.plus({ seconds: timeSpan });
     const sendCatergory = category === "" ? "Untitled..." : category;
     const value = {
@@ -54,8 +55,23 @@ function LogContextProvider({ children }) {
       day,
     };
     setCategory("");
-    createNewLog(value);
+    await createNewLog(value);
+    setFetch((prev) => !prev);
+    // fetchHome();
   };
+
+  useEffect(() => {
+    getCurLogByCat();
+    getTotalHour();
+    getAverageAndAverageCompared();
+  }, [fetch]);
+
+  // const fetchHome = () => {
+  //   console.log("fetchHome");
+  //   getCurLogByCat();
+  //   getTotalHour();
+  //   getAverageAndAverageCompared();
+  // };
 
   const logEnded = (timeStart, timeSpan, category) => {
     const weekDayShortname = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
@@ -67,56 +83,66 @@ function LogContextProvider({ children }) {
       createLog({ timeStart: timeStart, category, day, week, timeSpan });
     }
   };
+
   const getLog = async (week) => {
-    const inputWeek = week || DateTime.now().weekNumber;
-    const allLog = await getLogs(weekId);
-    setLogByDate(allLog.logsByDate);
-    setCategoryByDate(allLog.category);
+    const allLog = week && (await getLogs(week));
+    if (allLog) {
+      setLogByDate(allLog.logsByDate);
+      setCategoryByDate(allLog.category);
+    }
   };
 
-  useEffect(() => {
-    const getLogByCat = async () => {
+  const getCurLogByCat = async () => {
+    try {
       const curLogs = await getCurLogsByCat();
       setLogByCat(curLogs);
-    };
-    getLogByCat();
-  }, [isRunning]);
-
-  useEffect(() => {
-    const getTotal = async () => {
+    } catch (err) {
+      console.log("getCurLogByCat error: ", err);
+    }
+  };
+  const getTotalHour = async () => {
+    try {
       const totalHour = await getSum();
       setSum(totalHour);
-    };
-    getTotal();
-  }, [isRunning]);
+    } catch (err) {
+      console.log("getTotalHour error: " + err);
+    }
+  };
 
-  useEffect(() => {
-    const getAverage = async ({ week }) => {
+  const getAverageAndAverageCompared = async () => {
+    try {
+      const week = DateTime.now().weekNumber;
       const res = await compareToAverage(week);
       setAverageCompared(res.averageCompared.toFixed(2));
       setAverage(res.average.toFixed(2));
-    };
-    const week = DateTime.now().weekNumber;
-    getAverage(week);
-  }, [isRunning]);
+    } catch (err) {
+      console.log("getAverageAndAverageCompared error: " + err);
+    }
+  };
 
   useEffect(() => {
     const getCategoryGraph = async () => {
       const categoryData = await graphCategory();
       setCategoryGraphData(categoryData);
     };
+    console.log(getCategoryGraph);
     getCategoryGraph();
   }, []);
 
   useEffect(() => {
     const getWeeklyData = async () => {
       const weeklyData = await graphAverage();
-
       setAverageGraphData(weeklyData.averageWeek);
       setThisWeekGraphData(weeklyData.thisWeek);
     };
+    console.log(getWeeklyData);
+
     getWeeklyData();
   }, []);
+
+  useEffect(() => {
+    weekId && getLog(weekId);
+  }, [weekId]);
 
   return (
     <LogContext.Provider
